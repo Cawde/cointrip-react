@@ -5,20 +5,16 @@ import { useState } from "react";
 function App() {
   const [userId, setUserId] = useState(null);
   return (
-    <div className="App">
-      
       <Router>
-        <NavBar/>
         <main>
           <Routes>
-            <Route path="/" element={<Home/>} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<div className="home-page"><NavBar/><Home/></div>} />
+            <Route path="/register" element={<div className="register-page"><NavBar/><Register /></div>} />
+            <Route path="/login" element={<div className="login-page"><NavBar/><Login /></div>} />
             <Route path="/dashboard/:userId" element={<Dashboard />} />
           </Routes>
         </main>
       </Router>
-    </div>
   );
 }
 

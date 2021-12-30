@@ -1,3 +1,7 @@
+* {
+  overflow: hidden;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,6 +9,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  margin: 0px;
+  padding: 0px;
+  min-height: 100vh;
 }
 
 code {
@@ -19,4 +26,13 @@ a {
 
 ul {
   list-style-type: none;
+}
+
+.icon {
+  height: 60px;
+  width: 100px;
+}
+
+.app-name {
+  font-size: 50px;
 }
