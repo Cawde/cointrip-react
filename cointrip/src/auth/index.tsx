@@ -3,10 +3,18 @@ export function getToken() {
   return token;
 }
 
-export function logInUserToLocalStorage(token:string) {
+export function setToken(token:string) {
   localStorage.setItem("token", token);
 }
 
-export function RemoveUserFromLocalStorage() {
+export function removeToken() {
   localStorage.removeItem("token");
+}
+
+export function setUserId(id:string) {
+  localStorage.setItem("id", id);
+}
+
+export function getUserId() {
+  localStorage.getItem("id");
 }

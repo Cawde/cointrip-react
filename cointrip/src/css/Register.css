@@ -1,0 +1,51 @@
+.App {
+  background: url("../assets/register.jpg");
+  height: 100vh;
+  background-size: cover;
+}
+
+a {
+  color: rgb(0, 162, 255);
+}
+
+.register-page-container {
+  background-color: rgb(255, 254, 254);
+  display: flex;
+  justify-content: center;
+  justify-self: center;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px;
+  min-width: 250px;
+  width: 20%;
+  height: 100%;
+  border-radius: 10px;
+  -webkit-box-shadow: -1px 1px 3px 9px rgba(141, 137, 137, 0.411);
+  -moz-box-shadow: -1px 1px 3px 9px rgba(141, 137, 137, 0.411);
+  box-shadow: -1px 1px 3px 9px rgba(141, 137, 137, 0.411);
+  align-items: center;
+  padding-left: auto;
+  margin-top: 150px;
+}
+
+.register-form {
+  width: 100%;
+}
+
+.input-field {
+  width: 100%;
+}
+
+#registerBtn {
+  margin-top: 20px;
+  width: 100%;
+}
+
+.register-form-container {
+  height: 100%;
+  width: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0px;
+}

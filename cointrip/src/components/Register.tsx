@@ -1,7 +1,11 @@
-import { Button, Container, TextField } from '@material-ui/core';
-import React, { useState } from 'react';
-import { useStyles } from './NavBar';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import { Button, Container, TextField } from "@material-ui/core";
+import React, { useState } from "react";
+import { useStyles } from "./NavBar";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+import { setToken, setUserId } from "../auth";
+import { Link, useNavigate } from "react-router-dom";
+import "../css/Register.css";
+import { Person } from "@material-ui/icons";
 
 export default function Register() {
   const [firstName, setFirstName] = useState("");
@@ -10,8 +14,9 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [passConfirm, setPassConfirm] = useState("");
   const classes = useStyles();
+  let navigate = useNavigate();
 
-  function createUser(event:React.FormEvent<HTMLFormElement>) {
+  function createUser(event: React.FormEvent<HTMLFormElement>) {
     event?.preventDefault();
     if (firstName && lastName && password === passConfirm) {
       fetch("https://fierce-sea-46269.herokuapp.com/api/users/register", {
@@ -23,54 +28,105 @@ export default function Register() {
           firstName: firstName,
           lastName: lastName,
           email: email,
-          password: password
+          password: password,
         }),
       })
         .then((response) => response.json())
         .then((result) => {
           console.log(result);
-          if (result.message === "This email has already been used to register with Cointrip.") {
-            alert("This email has already been used to register with Cointrip. Either sign in or enter another email please.");
+          if (result.success === false) {
+            alert(result.message);
+          } else {
+            setToken(result.token);
+            setUserId(result.userId);
+            navigate(`/dashboard/${result.userId}`);
           }
         })
         .catch(console.error);
     }
   }
-  return(
-
-    <div>
-      <Container>
-        <form autoComplete="off" onSubmit={(event) => {createUser(event)}}>
+  return (
+    <div className="register-page-container">
+      <div className="register-form-container">
+        <Container>
+          <form
+            className="register-form"
+            autoComplete="off"
+            onSubmit={(event) => {
+              createUser(event);
+            }}
+          >
+            <TextField
+              className="input-field"
+              required
+              id="standard-basic"
+              label="First Name"
+              size="small"
+              onChange={(event) => {
+                setFirstName(event.target.value);
+              }}
+            />
+            <TextField
+              className="input-field"
+              required
+              id="standard-basic"
+              label="Last Name"
+              size="small"
+              onChange={(event) => {
+                setLastName(event.target.value);
+              }}
+            />
+            <TextField
+              className="input-field"
+              required
+              id="standard-basic"
+              label="Email"
+              size="small"
+              onChange={(event) => {
+                setEmail(event.target.value);
+              }}
+            />
+            <TextField
+              className="input-field"
+              required
+              id="standard-basic"
+              label="Password (7 characters)"
+              size="small"
+              type="password"
+              inputProps={{ pattern: ".{7,}" }}
+              onChange={(event) => {
+                setPassword(event.target.value);
+              }}
+            />
+            <TextField
+              className="input-field"
+              required
+              id="standard-basic"
+              label="Retype Password"
+              size="small"
+              type="password"
+              onChange={(event) => {
+                setPassConfirm(event.target.value);
+              }}
+            />
+          </form>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            id="registerBtn"
+          >
+            Register with Cointrip!
+          </Button>
           <div>
-            <TextField required id="standard-basic" label="First Name" size="small" onChange={(event) => {
-              setFirstName(event.target.value);
-            }}/>
+            <p>Have an account?</p>
+            <Link to="/login">
+              <p>Sign In</p>
+            </Link>
           </div>
-          <div>
-            <TextField required id="standard-basic" label="Last Name" size="small" onChange={(event) => {
-              setLastName(event.target.value);
-            }}/>
-          </div>
-          <div>
-            <TextField required id="standard-basic" label="Email" size="small" onChange={(event) => {
-              setEmail(event.target.value);
-            }}/>
-          </div>
-          <div>
-            <TextField required id="standard-basic" label="Password (atleast 7 characters)" size="small" type="password"  inputProps={{pattern:".{7,}"}} onChange={(event) => {
-              setPassword(event.target.value);
-            }}/>
-          </div>
-          <div>
-            <TextField required id="standard-basic" label="Retype Password" size="small" type="password" onChange={(event) => {
-              setPassConfirm(event.target.value);
-            }}/>
-          </div>
-          <Button type="submit" variant="contained" color="primary" className={classes.button}>Register with Cointrip!</Button>
-        </form>
-      </Container>
+        </Container>
+      </div>
     </div>
-
-  )
-
+  );
 }

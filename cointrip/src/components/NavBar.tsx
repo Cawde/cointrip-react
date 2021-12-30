@@ -9,6 +9,7 @@ export const useStyles = makeStyles({
   button: {
     color: "white",
     backgroundColor: theme.palette.primary.main,
+    marginTop: "5px"
   },
 });
 
@@ -30,19 +31,7 @@ export default function NavBar() {
               startIcon={<Person />}
               className={classes.button}
             >
-              Log in
-            </Button>
-          </Link>
-        </li>
-        <li>
-          <Link to="/register">
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<Person />}
-              className={classes.button}
-            >
-              Register
+              Sign In
             </Button>
           </Link>
         </li>
