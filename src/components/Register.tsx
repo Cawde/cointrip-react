@@ -3,11 +3,11 @@ import { Button, Container, TextField } from "@material-ui/core";
 import React, { useState } from "react";
 import { useStyles } from "./NavBar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
-import { setToken, setUserId } from "../auth";
+// import { setToken, setUserId } from "../auth";
 import { Link, useNavigate } from "react-router-dom";
 import { Person } from "@material-ui/icons";
 
-export default function Register() {
+export default function Register({ setUserId }: any) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -19,8 +19,9 @@ export default function Register() {
   function createUser(event: React.FormEvent<HTMLFormElement>) {
     event?.preventDefault();
     if (firstName && lastName && password === passConfirm) {
-      fetch("https://fierce-sea-46269.herokuapp.com/api/users/register", {
+      fetch("http://localhost:3000/api/users/register", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -37,7 +38,6 @@ export default function Register() {
           if (result.success === false) {
             alert(result.message);
           } else {
-            setToken(result.token);
             setUserId(result.userId);
             navigate(`/dashboard/${result.userId}`);
           }
@@ -46,70 +46,69 @@ export default function Register() {
     }
   }
   return (
-      <div className="register-page-container">
-        <div className="register-form-container">
-          <Container>
-            <form
-              className="register-form"
-              autoComplete="off"
-              onSubmit={(event) => {
-                createUser(event);
+    <div className="register-page-container">
+      <div className="register-form-container">
+        <Container>
+          <form
+            className="register-form"
+            autoComplete="off"
+            onSubmit={(event) => {
+              createUser(event);
+            }}
+          >
+            <TextField
+              className="input-field"
+              required
+              id="standard-basic"
+              label="First Name"
+              size="small"
+              onChange={(event) => {
+                setFirstName(event.target.value);
               }}
-            >
-              <TextField
-                className="input-field"
-                required
-                id="standard-basic"
-                label="First Name"
-                size="small"
-                onChange={(event) => {
-                  setFirstName(event.target.value);
-                }}
-              />
-              <TextField
-                className="input-field"
-                required
-                id="standard-basic"
-                label="Last Name"
-                size="small"
-                onChange={(event) => {
-                  setLastName(event.target.value);
-                }}
-              />
-              <TextField
-                className="input-field"
-                required
-                id="standard-basic"
-                label="Email"
-                size="small"
-                onChange={(event) => {
-                  setEmail(event.target.value);
-                }}
-              />
-              <TextField
-                className="input-field"
-                required
-                id="standard-basic"
-                label="Password (7 characters)"
-                size="small"
-                type="password"
-                inputProps={{ pattern: ".{7,}" }}
-                onChange={(event) => {
-                  setPassword(event.target.value);
-                }}
-              />
-              <TextField
-                className="input-field"
-                required
-                id="standard-basic"
-                label="Retype Password"
-                size="small"
-                type="password"
-                onChange={(event) => {
-                  setPassConfirm(event.target.value);
-                }}
-              />
-            </form>
+            />
+            <TextField
+              className="input-field"
+              required
+              id="standard-basic"
+              label="Last Name"
+              size="small"
+              onChange={(event) => {
+                setLastName(event.target.value);
+              }}
+            />
+            <TextField
+              className="input-field"
+              required
+              id="standard-basic"
+              label="Email"
+              size="small"
+              onChange={(event) => {
+                setEmail(event.target.value);
+              }}
+            />
+            <TextField
+              className="input-field"
+              required
+              id="standard-basic"
+              label="Password (7 characters)"
+              size="small"
+              type="password"
+              inputProps={{ pattern: ".{7,}" }}
+              onChange={(event) => {
+                setPassword(event.target.value);
+              }}
+            />
+            <TextField
+              className="input-field"
+              required
+              id="standard-basic"
+              label="Confirm password"
+              size="small"
+              type="password"
+              onChange={(event) => {
+                setPassConfirm(event.target.value);
+              }}
+            />
             <Button
               type="submit"
               variant="contained"
@@ -119,14 +118,16 @@ export default function Register() {
             >
               Register with Cointrip!
             </Button>
-            <div>
-              <p>Have an account?</p>
-              <Link to="/login">
-                <p>Sign In</p>
-              </Link>
-            </div>
-          </Container>
-        </div>
+          </form>
+
+          <div>
+            <p>Have an account?</p>
+            <Link to="/login">
+              <p>Sign In</p>
+            </Link>
+          </div>
+        </Container>
       </div>
+    </div>
   );
 }

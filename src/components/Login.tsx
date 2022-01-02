@@ -4,9 +4,8 @@ import { Button, Container, TextField } from "@material-ui/core";
 import { useStyles } from "./NavBar";
 import { Link, useNavigate } from "react-router-dom";
 import { Person } from "@material-ui/icons";
-import { setToken, setUserId } from "../auth";
 
-export default function Login() {
+export default function Login({setUserId}: any) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const classes = useStyles();
@@ -14,8 +13,9 @@ export default function Login() {
 
   function loginUser(event: React.FormEvent<HTMLFormElement>) {
     event?.preventDefault();
-    fetch("https://fierce-sea-46269.herokuapp.com/api/users/login", {
+    fetch("http://localhost:5000/api/users/login", {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -30,7 +30,6 @@ export default function Login() {
         if (result.success === false) {
           alert(result.message);
         } else {
-          setToken(result.token);
           setUserId(result.userId);
           navigate(`/dashboard/${result.userId}`);
         }

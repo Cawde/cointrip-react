@@ -8,10 +8,10 @@ function App() {
       <Router>
         <main>
           <Routes>
-            <Route path="/" element={<div className="home-page"><NavBar/><Home/></div>} />
-            <Route path="/register" element={<div className="register-page"><NavBar/><Register /></div>} />
-            <Route path="/login" element={<div className="login-page"><NavBar/><Login /></div>} />
-            <Route path="/dashboard/:userId" element={<Dashboard />} />
+            <Route path="/" element={<div className="home-page-container"><Home/></div>} />
+            <Route path="/register" element={<div className="register-page"><NavBar userId={userId}/><Register setUserId={setUserId}/></div>} />
+            <Route path="/login" element={<div className="login-page"><NavBar userId={userId}/><Login setUserId={setUserId}/></div>} />
+            <Route path="/dashboard/:userId" element={<Dashboard userId={userId} setUserId={setUserId}/>} />
           </Routes>
         </main>
       </Router>

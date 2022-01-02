@@ -1,13 +1,9 @@
 .navbar-container {
   /* background-color: rgba(60, 113, 160, 0.658); */
+  margin-top: 0px;
 }
 
-.navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 30px;
-}
+
 
 .appname-icon-container {
   display: flex;
@@ -21,3 +17,6 @@
   margin-top: 5px;
 }
 
+ul {
+  margin-top: 0px;
+}
