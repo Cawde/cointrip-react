@@ -19,7 +19,7 @@ export default function Register({ setUserId }: any) {
   function createUser(event: React.FormEvent<HTMLFormElement>) {
     event?.preventDefault();
     if (firstName && lastName && password === passConfirm) {
-      fetch("http://localhost:3000/api/users/register", {
+      fetch("http://localhost:5000/api/users/register", {
         method: "POST",
         credentials: "include",
         headers: {

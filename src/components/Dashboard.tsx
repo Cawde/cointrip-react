@@ -3,7 +3,8 @@ import { Button, Card, CardContent, Container, Modal, TextField, Typography } fr
 import { ExitToApp, HomeOutlined, Settings } from "@material-ui/icons";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Login } from "./index";
+import { Login, SearchBar } from "./index";
+import StripeCheckout from "react-stripe-checkout";
 // import { getToken, getUserId } from "../auth";
 
 interface Transaction {
@@ -19,14 +20,19 @@ interface Transaction {
   notes: string;
 }
 
-export default function Dashboard({ userId, setUserId }: any) {
+export default function Dashboard(this: any, { userId, setUserId, email, setEmail }: any) {
   let navigate = useNavigate();
   const [transactions, setTransactions] = useState([]);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [open, setOpen] = useState(false);
+  const [openStripe, setOpenStripe] = useState(false);
+  const [amount, setAmount] = useState(0);
+  const [note, setNote] = useState("");
+  const [recipientId, setRecipientId] = useState("");
+  const [recipientName, setRecipientName] = useState("");
+  const [recipientEmail, setRecipientEmail] = useState("");
 
   function getTransactionHistory() {
     fetch(`http://localhost:5000/api/users/dashboard/${userId}`)
@@ -64,9 +70,62 @@ export default function Dashboard({ userId, setUserId }: any) {
         setOpen(false);
   }
 
+  function createTransaction() {
+    fetch("http://localhost:5000/api/transactions", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          initiateId: userId,
+          initiateName: firstName,
+          initiateEmail: email,
+          amount: amount,
+          recipientId: recipientId,
+          recipientName: recipientName,
+          recipientEmail: recipientEmail,
+          date: new Date(),
+          notes: note
+        }),
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          console.log(result);
+        })
+        .catch(console.error);
+  }
+
   function signOut() {
     setUserId(null);
     return <Link to="/"></Link>;
+  }
+
+  function handleToken(token: any) {
+    console.log({token})
+    const fullName = `${firstName} ${lastName}`;
+    fetch("http://localhost:5000/api/transactions/checkout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }, 
+      body: JSON.stringify({
+        token,
+        name: fullName,
+        amount: amount
+      })
+    })
+    .then((response) => response.json())
+    .then((result) => {
+      console.log(result);
+      if (result.message === "Success") {
+        try {
+          createTransaction();
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    })
   }
 
   useEffect(() => {
@@ -82,13 +141,64 @@ export default function Dashboard({ userId, setUserId }: any) {
   }, []);
 
   return (
-    
     <div className="dashboard-page">
+      <SearchBar setOpenStripe={setOpenStripe} setRecipientId={setRecipientId} setRecipientName={setRecipientName} setRecipientEmail={setRecipientEmail}/>
+      <Modal open={openStripe} className="edit-modal-container">
+        <div className="edit-form-container">
+          <Container className="material-container">
+            <p>Enter the information below</p>
+            <form
+              className="register-form"
+              autoComplete="off"
+              onSubmit={(event) => {
+                editUser(event);
+              }}
+            >
+              <TextField
+                className="input-field"
+                autoComplete="off"
+                id="standard-basic"
+                label="Enter amount to send"
+                size="small"
+                type="number"
+                required
+                onChange={(event) => {
+                  setAmount(Number(event.target.value));
+                }}
+              />
+              <TextField
+                className="input-field"
+                autoComplete="off"
+                id="standard-basic"
+                label="Note"
+                size="small"
+                required
+                onChange={(event) => {
+                  setNote(event.target.value);
+                }}
+              />
+            </form>
+            <div onClick={() => setOpenStripe(false)}>
+              <StripeCheckout
+                stripeKey="pk_test_51KAMy9Hcy7NALIAJCvBtS0HUY0KACp8LKKO8Trw36v6ev0Wrns88BkWcMrvo0puv3RDzhfaP4mPToVQeCdJtbv0o001xCuqi0o"
+                token={handleToken}
+                billingAddress
+                shippingAddress
+                amount={amount * 100}
+              />
+            </div>
+          </Container>
+        </div>
+      </Modal>
       <section className="dashboard-sidebar">
         <ul>
           <li>
             <Link to="/">
-              <Button variant="outlined" color="primary" startIcon={<HomeOutlined />}>
+              <Button
+                variant="outlined"
+                color="primary"
+                startIcon={<HomeOutlined />}
+              >
                 Home
               </Button>
             </Link>
@@ -127,12 +237,17 @@ export default function Dashboard({ userId, setUserId }: any) {
                 return (
                   <Card className="transaction-results" key={index}>
                     <CardContent>
-                      <Typography variant="h5">id: {transaction.id}</Typography>
-                      <Typography variant="h5">{transaction.initiateName}</Typography>
-                      <Typography variant="h5">{transaction.initiateEmail}</Typography>
-                      <Typography variant="h5">{transaction.amount} USD</Typography>
+                      <Typography variant="h5">
+                        {transaction.initiateName} sent you ${" "}
+                        {transaction.amount}{" "}
+                      </Typography>
+                      <Typography variant="h5">
+                        {transaction.initiateEmail}
+                      </Typography>
                       <Typography variant="h5">{transaction.date}</Typography>
-                      <Typography variant="h5">{transaction.notes}</Typography>
+                      <Typography variant="h5">
+                        Message: {transaction.notes}
+                      </Typography>
                     </CardContent>
                   </Card>
                 );
@@ -149,14 +264,21 @@ export default function Dashboard({ userId, setUserId }: any) {
               .map((transaction: Transaction, index: number) => {
                 return (
                   <div className="transaction-results" key={index}>
-                    <ul>
-                      <li>id: {transaction.id}</li>
-                      <li>amount: {transaction.amount} USD</li>
-                      <li>Recipient name: {transaction.recipientName}</li>
-                      <li>Recipient email: {transaction.recipientEmail}</li>
-                      <li>date: {transaction.date}</li>
-                      <li>notes: {transaction.notes}</li>
-                    </ul>
+                    <Card className="transaction-results" key={index}>
+                      <CardContent>
+                        <Typography variant="h5">
+                          You sent {transaction.recipientName} $
+                          {transaction.amount}
+                        </Typography>
+                        <Typography variant="h5">
+                          {transaction.recipientEmail}
+                        </Typography>
+                        <Typography variant="h5">{transaction.date}</Typography>
+                        <Typography variant="h5">
+                          Message: {transaction.notes}
+                        </Typography>
+                      </CardContent>
+                    </Card>
                   </div>
                 );
               })
@@ -164,80 +286,80 @@ export default function Dashboard({ userId, setUserId }: any) {
       </div>
       <Modal open={open} className="edit-modal-container">
         <div className="edit-form-container">
-        <Container className="material-container">
-          <p>Edit first name or last name.</p>
-          <form
-            className="register-form"
-            autoComplete="off"
-            onSubmit={(event) => {
-              editUser(event);
-            }}
-          >
-            <TextField
-              className="input-field"
+          <Container className="material-container">
+            <p>Edit first name or last name.</p>
+            <form
+              className="register-form"
               autoComplete="off"
-              id="standard-basic"
-              label="First Name"
-              size="small"
-              placeholder={firstName}
-              onChange={(event) => {
-                setFirstName(event.target.value);
+              onSubmit={(event) => {
+                editUser(event);
               }}
-            />
-            <TextField
-              className="input-field"
-              autoComplete="off"
-              id="standard-basic"
-              label="Last Name"
-              size="small"
-              placeholder={lastName}
-              onChange={(event) => {
-                setLastName(event.target.value);
-              }}
-            />
-            <p>Enter email and password for verification below</p>
-            <TextField
-              className="input-field"
-              autoComplete="off"
-              required
-              id="standard-basic"
-              label="Email"
-              size="small"
-              onChange={(event) => {
-                setEmail(event.target.value);
-              }}
-            />
-            <TextField
-              className="input-field"
-              autoComplete="off"
-              required
-              id="standard-basic"
-              label="Password"
-              size="small"
-              type="password"
-              onChange={(event) => {
-                setPassword(event.target.value);
-              }}
-            />
+            >
+              <TextField
+                className="input-field"
+                autoComplete="off"
+                id="standard-basic"
+                label="First Name"
+                size="small"
+                placeholder={firstName}
+                onChange={(event) => {
+                  setFirstName(event.target.value);
+                }}
+              />
+              <TextField
+                className="input-field"
+                autoComplete="off"
+                id="standard-basic"
+                label="Last Name"
+                size="small"
+                placeholder={lastName}
+                onChange={(event) => {
+                  setLastName(event.target.value);
+                }}
+              />
+              <p>Enter email and password for verification below</p>
+              <TextField
+                className="input-field"
+                autoComplete="off"
+                required
+                id="standard-basic"
+                label="Email"
+                size="small"
+                onChange={(event) => {
+                  setEmail(event.target.value);
+                }}
+              />
+              <TextField
+                className="input-field"
+                autoComplete="off"
+                required
+                id="standard-basic"
+                label="Password"
+                size="small"
+                type="password"
+                onChange={(event) => {
+                  setPassword(event.target.value);
+                }}
+              />
+              <Button
+                type="submit"
+                variant="outlined"
+                color="primary"
+                id="editBtn"
+              >
+                Submit Changes
+              </Button>
+            </form>
             <Button
               type="submit"
               variant="outlined"
-              color="primary"
+              color="secondary"
               id="editBtn"
+              onClick={() => setOpen(false)}
             >
-              Submit Changes
+              Close
             </Button>
-          </form>
-          <Button
-            type="submit"
-            variant="outlined"
-            color="secondary"
-            id="editBtn"
-            onClick={() => setOpen(false)}
-          >
-            Close
-          </Button>
-        </Container>
+          </Container>
         </div>
       </Modal>
     </div>

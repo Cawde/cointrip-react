@@ -5,8 +5,8 @@ import { useStyles } from "./NavBar";
 import { Link, useNavigate } from "react-router-dom";
 import { Person } from "@material-ui/icons";
 
-export default function Login({setUserId}: any) {
-  const [email, setEmail] = useState("");
+export default function Login({setUserId, email, setEmail}: any) {
+  
   const [password, setPassword] = useState("");
   const classes = useStyles();
   let navigate = useNavigate();
