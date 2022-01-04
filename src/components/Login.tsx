@@ -3,11 +3,11 @@ import React, { useState } from "react";
 import { Button, Container, TextField } from "@material-ui/core";
 import { useStyles } from "./NavBar";
 import { Link, useNavigate } from "react-router-dom";
+import { getUserIdLS, setUserIdLS } from "../auth";
 import { Person } from "@material-ui/icons";
 
-export default function Login({setUserId, email, setEmail}: any) {
+export default function Login({setUserId, email, setEmail, password, setPassword}: any) {
   
-  const [password, setPassword] = useState("");
   const classes = useStyles();
   let navigate = useNavigate();
 
@@ -31,6 +31,7 @@ export default function Login({setUserId, email, setEmail}: any) {
           alert(result.message);
         } else {
           setUserId(result.userId);
+          setUserIdLS(result.userId);
           navigate(`/dashboard/${result.userId}`);
         }
         // After log in, redirect to their dashboard

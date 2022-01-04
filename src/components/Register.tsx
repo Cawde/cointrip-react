@@ -3,47 +3,51 @@ import { Button, Container, TextField } from "@material-ui/core";
 import React, { useState } from "react";
 import { useStyles } from "./NavBar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
-// import { setToken, setUserId } from "../auth";
+import { getUserIdLS, setUserIdLS } from "../auth";
 import { Link, useNavigate } from "react-router-dom";
 import { Person } from "@material-ui/icons";
 
-export default function Register({ setUserId }: any) {
+export default function Register({ setUserId, email, setEmail, password, setPassword }: any) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [passConfirm, setPassConfirm] = useState("");
   const classes = useStyles();
   let navigate = useNavigate();
 
   function createUser(event: React.FormEvent<HTMLFormElement>) {
     event?.preventDefault();
-    if (firstName && lastName && password === passConfirm) {
-      fetch("http://localhost:5000/api/users/register", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName: firstName,
-          lastName: lastName,
-          email: email,
-          password: password,
-        }),
-      })
-        .then((response) => response.json())
-        .then((result) => {
-          console.log(result);
-          if (result.success === false) {
-            alert(result.message);
-          } else {
-            setUserId(result.userId);
-            navigate(`/dashboard/${result.userId}`);
-          }
-        })
-        .catch(console.error);
+    if (password !== passConfirm) {
+      return alert("Passwords do not match");
     }
+    if (!firstName || !lastName) {
+      return alert("Please enter first and last name");
+    }
+
+    fetch("http://localhost:5000/api/users/register", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        password: password,
+      }),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result.success === false) {
+          alert(result.message);
+        } else {
+          setUserId(result.userId);
+          setUserIdLS(result.userId);
+          navigate(`/dashboard/${result.userId}`);
+        }
+      })
+      .catch(console.error);
   }
   return (
     <div className="register-page-container">

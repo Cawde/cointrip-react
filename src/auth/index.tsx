@@ -3,5 +3,5 @@ export function setUserIdLS(id:string) {
 }
 
 export function getUserIdLS() {
-  localStorage.getItem("id");
+  return localStorage.getItem("id");
 }

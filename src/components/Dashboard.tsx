@@ -2,9 +2,10 @@ import "../css/Dashboard.css";
 import { Button, Card, CardContent, Container, Modal, TextField, Typography } from "@material-ui/core";
 import { ExitToApp, HomeOutlined, Settings } from "@material-ui/icons";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Login, SearchBar } from "./index";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Login, SearchBar, CardPayout, VerifyUserModal } from "./index";
 import StripeCheckout from "react-stripe-checkout";
+import VerifyBankModal from "./AddBank";
 // import { getToken, getUserId } from "../auth";
 
 interface Transaction {
@@ -20,7 +21,9 @@ interface Transaction {
   notes: string;
 }
 
-export default function Dashboard(this: any, { userId, setUserId, email, setEmail }: any) {
+
+
+export default function Dashboard(this: any, { userId, setUserId, email, setEmail, setCustomerUrl }: any) {
   let navigate = useNavigate();
   const [transactions, setTransactions] = useState([]);
   const [firstName, setFirstName] = useState("");
@@ -33,6 +36,10 @@ export default function Dashboard(this: any, { userId, setUserId, email, setEmai
   const [recipientId, setRecipientId] = useState("");
   const [recipientName, setRecipientName] = useState("");
   const [recipientEmail, setRecipientEmail] = useState("");
+  const [openVUM, setOpenVUM] = useState(false);
+  const [openBM, setOpenBM] = useState(false);
+  const [dwollaToken, setDwollaToken] = useState("");
+  const balance = 30;
 
   function getTransactionHistory() {
     fetch(`http://localhost:5000/api/users/dashboard/${userId}`)
@@ -42,6 +49,7 @@ export default function Dashboard(this: any, { userId, setUserId, email, setEmai
         setTransactions(result.userTransactions);
         setFirstName(result.user.firstName);
         setLastName(result.user.lastName);
+        setCustomerUrl(result.user.customerUrl)
       })
       .catch(console.error);
   }
@@ -98,35 +106,41 @@ export default function Dashboard(this: any, { userId, setUserId, email, setEmai
 
   function signOut() {
     setUserId(null);
+    localStorage.clear();
     return <Link to="/"></Link>;
   }
 
-  function handleToken(token: any) {
-    console.log({token})
-    const fullName = `${firstName} ${lastName}`;
-    fetch("http://localhost:5000/api/transactions/checkout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      }, 
-      body: JSON.stringify({
-        token,
-        name: fullName,
-        amount: amount
-      })
-    })
-    .then((response) => response.json())
-    .then((result) => {
-      console.log(result);
-      if (result.message === "Success") {
-        try {
-          createTransaction();
-        } catch (e) {
-          console.log(e);
-        }
-      }
-    })
-  }
+
+  //Stripe stuff below
+
+  // function handleToken(token: any) {
+  //   console.log({token})
+  //   const fullName = `${firstName} ${lastName}`;
+  //   fetch("http://localhost:5000/api/transactions/checkout", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     }, 
+  //     body: JSON.stringify({
+  //       token,
+  //       name: fullName,
+  //       amount: amount
+  //     })
+  //   })
+  //   .then((response) => response.json())
+  //   .then((result) => {
+  //     console.log(result);
+  //     if (result.message === "Success") {
+  //       try {
+  //         createTransaction();
+  //       } catch (e) {
+  //         console.log(e);
+  //       }
+  //     }
+  //   })
+  // }
+
+
 
   useEffect(() => {
     if (!userId) {
@@ -143,7 +157,12 @@ export default function Dashboard(this: any, { userId, setUserId, email, setEmai
   return (
     <div className="dashboard-page">
       <SearchBar setOpenStripe={setOpenStripe} setRecipientId={setRecipientId} setRecipientName={setRecipientName} setRecipientEmail={setRecipientEmail}/>
-      <Modal open={openStripe} className="edit-modal-container">
+      <button onClick={() => navigate("/dashboard/payout")}>Deposit balance: $ {balance}</button>
+      <button onClick={() => setOpenVUM(true)}>Verify your account to send and accept money</button>
+      <button onClick={() => navigate("/add-bank")}>Add a bank to send money to other users</button>
+      <VerifyUserModal openVUM={openVUM} setOpenVUM={setOpenVUM} firstName={firstName} lastName={lastName} email={email} userId={userId}/>
+      {/* <VerifyBankModal openBM={openBM} setOpenBM={setOpenBM}/> */}
+      {/* <Modal open={openStripe} className="edit-modal-container">
         <div className="edit-form-container">
           <Container className="material-container">
             <p>Enter the information below</p>
@@ -154,7 +173,7 @@ export default function Dashboard(this: any, { userId, setUserId, email, setEmai
                 editUser(event);
               }}
             >
-              <TextField
+              <TextField8
                 className="input-field"
                 autoComplete="off"
                 id="standard-basic"
@@ -185,11 +204,12 @@ export default function Dashboard(this: any, { userId, setUserId, email, setEmai
                 billingAddress
                 shippingAddress
                 amount={amount * 100}
+                
               />
             </div>
           </Container>
         </div>
-      </Modal>
+      </Modal> */}
       <section className="dashboard-sidebar">
         <ul>
           <li>
