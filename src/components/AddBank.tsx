@@ -1,4 +1,4 @@
-import { Button, Container, Modal, TextField } from "@material-ui/core";
+import { Button, Container, TextField } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { getUserIdLS } from "../auth";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +16,7 @@ export default function AddBank({ customerUrl, email, setEmail, password, setPas
   const [accountNumber, setAccountNumber] = useState("");
   const [token, setToken] = useState("");
   const [fundingSource, setFundingSource] = useState("");
+  const [hasBank, setHasBank] = useState(false);
   let navigate = useNavigate();
 
   function editUser(event: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) {
@@ -29,7 +30,8 @@ export default function AddBank({ customerUrl, email, setEmail, password, setPas
       body: JSON.stringify({
         email,
         password,
-        fundingSource
+        fundingSource,
+        hasBank: true
       }),
     })
       .then((response) => response.json())
@@ -80,7 +82,8 @@ export default function AddBank({ customerUrl, email, setEmail, password, setPas
         console.log(logValue);
         if (logValue.error === null) {
           console.log(logValue.response._links["funding-source"].href);
-          setFundingSource(logValue.response._links["funding-source"].href)
+          setFundingSource(logValue.response._links["funding-source"].href);
+          setHasBank(true);
         }
       }
     );
@@ -101,19 +104,6 @@ export default function AddBank({ customerUrl, email, setEmail, password, setPas
 
   return (
     <div className="edit-form-container">
-      <Container className="material-container">
-        <form className="verfiy-user-form">
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            id="loginBtn"
-            onClick={(event) => editUser(event)}
-          >
-            Return to dashboard
-          </Button>
-        </form>
-      </Container>
       <Container className="material-container">
         <form className="verfiy-user-form" onSubmit={(event) => addBank(event)}>
           <TextField
@@ -183,6 +173,16 @@ export default function AddBank({ customerUrl, email, setEmail, password, setPas
             Submit
           </Button>
         </form>
+        <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            id="loginBtn"
+            disabled={hasBank}
+            onClick={(event) => editUser(event)}
+          >
+            Go to dashboard
+          </Button>
       </Container>
     </div>
   );

@@ -4,6 +4,5 @@ export { default as Login } from './Login';
 export { default as Dashboard } from './Dashboard';
 export { default as NavBar } from './NavBar';
 export { default as SearchBar } from './SearchBar';
-export { default as CardPayout } from './CardPayout';
-export { default as VerifyUserModal } from './VerifyUserModal';
+export { default as VerifyUser } from './VerifyUser';
 export { default as AddBank } from './AddBank';

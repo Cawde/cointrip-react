@@ -36,8 +36,8 @@
   height: 100%;
 }
 
-#stripe-section {
-  background: linear-gradient(rgba(0, 0, 0, 0.349), rgba(0, 0, 0, 0.377)), url("../assets/stripe.jpeg") no-repeat center center/cover;
+#dwolla-section {
+  background: linear-gradient(rgba(0, 0, 0, 0.349), rgba(0, 0, 0, 0.377)), url("../assets/dwolla.png") no-repeat center center/cover;
   color: white;
   text-shadow: 2px 3px 10px black;
   background-blend-mode: darken;
@@ -47,7 +47,7 @@
   background-color: black;
 }
 
-#money-section, #stripe-section {
+#money-section, #dwolla-section {
   display: flex;
   flex-direction: column;
   justify-content: center;

@@ -2,17 +2,15 @@ import "../css/Register.css";
 import { Button, Container, TextField } from "@material-ui/core";
 import React, { useState } from "react";
 import { useStyles } from "./NavBar";
-import MuiAlert, { AlertProps } from "@mui/material/Alert";
-import { getUserIdLS, setUserIdLS } from "../auth";
+import { setUserIdLS } from "../auth";
 import { Link, useNavigate } from "react-router-dom";
-import { Person } from "@material-ui/icons";
 
 export default function Register({ setUserId, email, setEmail, password, setPassword }: any) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [passConfirm, setPassConfirm] = useState("");
   const classes = useStyles();
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   function createUser(event: React.FormEvent<HTMLFormElement>) {
     event?.preventDefault();
@@ -44,7 +42,7 @@ export default function Register({ setUserId, email, setEmail, password, setPass
         } else {
           setUserId(result.userId);
           setUserIdLS(result.userId);
-          navigate(`/dashboard/${result.userId}`);
+          navigate(`/verify-user`);
         }
       })
       .catch(console.error);

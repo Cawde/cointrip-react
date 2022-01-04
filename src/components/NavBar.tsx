@@ -2,9 +2,8 @@ import "../css/NavBar.css";
 import { Button } from "@material-ui/core";
 import { Person } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/styles";
-import React from "react";
 import { Link } from "react-router-dom";
-import { theme } from "../theme";
+import { getUserIdLS } from "../auth";
 const icon = require("../assets/logo2.png");
 
 
@@ -17,7 +16,7 @@ export const useStyles = makeStyles({
   },
 });
 
-export default function NavBar({userId}: any) {
+export default function NavBar() {
   const classes = useStyles();
   return (
     <div className="navbar-container">
@@ -26,11 +25,11 @@ export default function NavBar({userId}: any) {
           <Link to="/" className="app-name" style={{ color: "white" }}>
             Coin trip
           </Link>
-          <img src={icon} className="icon" />
+          <img src={icon} className="icon" alt="Icon for Cointrip, displays a golden coin followed by 3 blue lines that insinuate movement"/>
         </li>
         <li>
-          {userId ? (
-            <Link to={`/dashboard/${userId}`}>
+          {getUserIdLS() ? (
+            <Link to={`/dashboard/${getUserIdLS()}`}>
               <Button
                 variant="contained"
                 color="primary"

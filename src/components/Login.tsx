@@ -1,15 +1,12 @@
 import "../css/Login.css";
-import React, { useState } from "react";
 import { Button, Container, TextField } from "@material-ui/core";
 import { useStyles } from "./NavBar";
 import { Link, useNavigate } from "react-router-dom";
-import { getUserIdLS, setUserIdLS } from "../auth";
-import { Person } from "@material-ui/icons";
+import { setUserIdLS } from "../auth";
 
 export default function Login({setUserId, email, setEmail, password, setPassword}: any) {
-  
   const classes = useStyles();
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   function loginUser(event: React.FormEvent<HTMLFormElement>) {
     event?.preventDefault();
@@ -32,7 +29,13 @@ export default function Login({setUserId, email, setEmail, password, setPassword
         } else {
           setUserId(result.userId);
           setUserIdLS(result.userId);
-          navigate(`/dashboard/${result.userId}`);
+          if (!result.user.isVerified) {
+            navigate('/verify-user')
+          } else if (result.user.isVerified && !result.user.hasBank) {
+            navigate('/add-bank')
+          } else {
+            navigate(`/dashboard/${result.userId}`);
+          }
         }
         // After log in, redirect to their dashboard
       })

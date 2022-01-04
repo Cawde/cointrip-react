@@ -10,20 +10,19 @@ export default function Home({userId}: any) {
   return (
     <div className="home-page">
       <section id="welcome-section">
-        <NavBar userId={userId} />
-        <video className="homepage-video" muted loop autoPlay>
+        <NavBar />
+        <video className="homepage-video" title="Video of girl using phone and laughing with friends" muted loop autoPlay>
           <source src={video} type="video/mp4"/>
           Your browser does not support the video tag.
         </video>
         <h1>Welcome to Coin trip</h1>
         <h2>Fast way to transfer money</h2>
       </section>
-      <section id="money-section">
+      <section id="money-section" aria-label="two girls using ipads">
         <h1>&nbsp; Send money to friends</h1>
       </section>
-      <section id="stripe-section">
-          <h1>Payments powered by Stripe</h1>
-          <p>*No credit card information stored on Cointrip*</p>
+      <section id="dwolla-section" aria-label="image of payment system Dwolla.js">
+          <h1>Payment system powered by Dwolla.js</h1>
       </section>
       <section id="signup-section">
         <Link to="/register">
@@ -32,7 +31,7 @@ export default function Home({userId}: any) {
           </Button>
         </Link>
         <div className="footer">
-          <img className="copyright-img" src={icon} />
+          <img className="copyright-img" src={icon} alt="copyright logo"/>
           <h2>Cointrip 2022</h2>
         </div>
       </section>
