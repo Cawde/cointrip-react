@@ -23,11 +23,11 @@ There are many views the user will interact with upon navigating Cointrip. Such 
 # Dashboard
 ![dashboard_view](https://user-images.githubusercontent.com/62577188/148220840-b18a2212-9b7a-4348-8c67-997b9959792d.png)
 
-The dashboard page will be navigated to via either logging in or adding a bank source via the register view flow.
+The dashboard page will be navigated to via either by logging in or by adding a bank source via the register view flow.
 
 
 
-When the user enters the register view flow, then will visit the register user page, verify user page, and the add bank page. These steps are required to send money to other users via the dashboard.
+When the user enters the register view flow, they will visit the register user page, verify user page, and then the add bank page. These steps are required to send money to other users via the dashboard.
 
 # Register page
 ![register_page_view](https://user-images.githubusercontent.com/62577188/148220795-740c75b5-7a70-4688-9c24-33b3c0594370.png)
@@ -44,7 +44,7 @@ assets - includes all images used for the site,
 components - includes all react components for the site, which holds all the logic for rendering each view the user sees as they navigate through Cointrip,
 css - includes all the css files for the corresponding components
 
-I decided to organize my files this way because it is simple, similar files are grouped together for ease of browsing, and it is a convention for developing a react app.
+I decided to organize my files this way because it is simple, similar files are grouped together for ease of browsing, and it is a convention for developing react apps.
 
 ![file_explorer](https://user-images.githubusercontent.com/62577188/148221336-97636984-1ab5-43e8-bf70-dfaa84bbffb9.png)
 
@@ -53,6 +53,9 @@ The NavBar component is present on most pages and the SearchBar component, altho
 
 This project was also built using @material-ui/@core library.
 Some UI components used from this particular library include: Button, Container, TextField, Various Icons, makeStyles, and Modal
+
+#Important
+Due to nature of the version of Dwolla.js this app uses, which is sandbox mode, no money will actually be sent to other users. Users can input their information into dwolla and add a bank source but no money will actually be withdrawn from the bank source. However, since the process works in sandbox mode it will work in live mode if I toggle it. I currently will not toggle it to live mode until I feel that the security of Cointrip is at the standard that any user who inputs sensitive information to a website would require.
 
 #Additional React information below
 
