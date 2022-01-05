@@ -1,0 +1,49 @@
+.edit-form-container {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background: url(../../src/assets/visual-stories-micheile-ZVprbBmT8QA-unsplash-min.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+  width: 100vw;
+}
+
+.information {
+  text-align: left;
+  max-width: 250px;
+  min-width: 125px;
+  height: 50%;
+  background-color: rgba(240, 255, 255, 0.609);
+  padding: 20px;
+  border-radius: 10px 0px 0px 10px;
+  border-right: 3px rgba(0, 0, 0, 0.418) solid;
+}
+.information h3 {
+  text-align: center;
+}
+.information ol li {
+  margin-bottom: 5px;
+  font-size: 1.3rem;
+}
+.mainForm {
+  width: 40%;
+  max-width: 475px;
+  min-width: 350px;
+  height: 50%;
+  background-color: azure;
+  padding: 20px;
+  border-radius: 0px 10px 10px 0px;
+}
+.verfiy-user-form {
+  height: 100%;
+}
+
+.verfiy-user-form div {
+  margin-bottom: 5px;
+}
+
+.stateInitials {
+  text-transform: capitalize;
+  font-weight: bold;
+}

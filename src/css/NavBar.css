@@ -1,0 +1,21 @@
+.navbar-container {
+  margin-top: 0px;
+}
+
+
+
+.appname-icon-container {
+  display: flex;
+  align-items: center;
+  text-shadow: 2px 2px 5px rgb(7, 7, 7);
+  color: white;
+}
+
+.appname-icon-container img {
+  margin-left: 15px;
+  margin-top: 5px;
+}
+
+ul {
+  margin-top: 0px;
+}

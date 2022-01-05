@@ -1,0 +1,98 @@
+.home-page-container {
+  background-color: rgba(0, 0, 0, 0.11);
+  width: 100vw;
+  height: 330vh;
+}
+
+#welcome-section {
+  text-align: center;
+  width: 100%;
+  height: 100vh;
+  scroll-snap-align: center;
+  color: white;
+  text-shadow: 2px 3px 10px black;
+}
+
+#welcome-section h1 {
+  margin-top: 30vh;
+}
+
+#money-section h1 {
+  text-align: left;
+  inline-size: 150px;
+  width: 40vw;
+}
+
+#money-section {
+  background: url("../assets/girls.jpg") no-repeat;
+  background-color: black;
+  color: white;
+  background-position: 100% 50%;
+  background-size: 60%;
+  flex: 1;
+  height: 100%;
+}
+
+#dwolla-section {
+  background: linear-gradient(rgba(0, 0, 0, 0.349), rgba(0, 0, 0, 0.377)), url("../assets/dwolla.png") no-repeat center center/cover;
+  color: white;
+  text-shadow: 2px 3px 10px black;
+  background-blend-mode: darken;
+}
+
+#signup-section {
+  background-color: black;
+}
+
+#money-section, #dwolla-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  height: 100vh;
+  scroll-snap-align: center;
+}
+
+section h1 {
+  font-size: 4rem;
+}
+
+.homepage-video {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  min-width: 100%;
+  min-height: 100%;
+  z-index: -2;
+}
+
+.copyright-img {
+  height: 30px;
+  width: 30px;
+}
+
+h2 {
+  color: white;
+}
+.signup-btn {
+  transform: scale(1.2);
+  margin-bottom: 25px;
+}
+
+#signup-section {
+  height: 30vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  margin-top: 50px;
+  font-size: 20px;
+  width: 250px;
+  justify-content: space-evenly;
+}

@@ -1,0 +1,51 @@
+.pay-modal-container {
+  height: 40%;
+  width: 100%;
+  background-color: white;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.input-field {
+  width: 100%;
+}
+
+#payBtn {
+  margin-top: 20px;
+  width: 100%;
+}
+
+.pay-modal-container {
+  background-color: rgb(255, 254, 254);
+  display: flex;
+  height: 50%;
+  width: 100%;
+  justify-content: center;
+  justify-self: center;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px;
+  min-width: 250px;
+  width: 20%;
+  border-radius: 10px;
+  -webkit-box-shadow: -1px 1px 3px 9px rgba(141, 137, 137, 0.411);
+  -moz-box-shadow: -1px 1px 3px 9px rgba(141, 137, 137, 0.411);
+  box-shadow: -1px 1px 3px 9px rgba(141, 137, 137, 0.411);
+  align-items: center;
+  padding-left: auto;
+  margin-top: 150px;
+}
+
+.pay-form-container {
+  height: 84%;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0px;
+  background-color: white;
+}
