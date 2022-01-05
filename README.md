@@ -1,5 +1,6 @@
 # Welcome to Cointrip’s front-end built with React.js!
-I wrote documentation for the backend this project uses located here: https://github.com/Cawde/cointrip/blob/main/README.md
+Cointrip is a peer-to-peer payment app develop by Cory Winfrey
+I wrote additional documentation for the backend that this project uses, located here: https://github.com/Cawde/cointrip/blob/main/README.md
 Please read!
 
 Please visit Cointrip here at https://stupefied-johnson-3ffdcc.netlify.app/
