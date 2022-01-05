@@ -2,10 +2,28 @@ import "../css/Register.css";
 import { Button, Container, TextField } from "@material-ui/core";
 import React, { useState } from "react";
 import { useStyles } from "./NavBar";
-import { setUserFirstNameLS, setUserIdLS, setUserLastNameLS } from "../auth";
+import {
+  setUserEmailLS,
+  setUserFirstNameLS,
+  setUserIdLS,
+  setUserLastNameLS,
+} from "../auth";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+toast.configure();
 
-export default function Register({ firstName, setFirstName, lastName, setLastName, setUserId, email, setEmail, password, setPassword }: any) {
+export default function Register({
+  firstName,
+  setFirstName,
+  lastName,
+  setLastName,
+  setUserId,
+  email,
+  setEmail,
+  password,
+  setPassword,
+}: any) {
   const [passConfirm, setPassConfirm] = useState("");
   const classes = useStyles();
   const navigate = useNavigate();
@@ -13,15 +31,32 @@ export default function Register({ firstName, setFirstName, lastName, setLastNam
   function createUser(event: React.FormEvent<HTMLFormElement>) {
     event?.preventDefault();
     if (password !== passConfirm) {
-      return alert("Passwords do not match");
+      toast.error("Passwords do not match", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return;
     }
     if (!firstName || !lastName) {
-      return alert("Please enter first and last name");
+      toast.error("Please enter first and last name", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return;
     }
 
-    fetch("http://localhost:5000/api/users/register", {
+    fetch("https://fierce-sea-46269.herokuapp.com/api/users/register", {
       method: "POST",
-      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -34,11 +69,23 @@ export default function Register({ firstName, setFirstName, lastName, setLastNam
     })
       .then((response) => response.json())
       .then((result) => {
+        console.log(result);
         if (result.success === false) {
-          alert(result.message);
+          toast.error(result.message, {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
         } else {
           setUserId(result.userId);
           setUserIdLS(result.userId);
+          setUserFirstNameLS(result.user.firstName);
+          setUserLastNameLS(result.user.lastName);
+          setUserEmailLS(result.user.email);
           setFirstName(result.user.firstName);
           setUserFirstNameLS(result.user.firstName);
           setUserLastNameLS(result.user.lastName);

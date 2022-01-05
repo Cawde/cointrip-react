@@ -1,6 +1,5 @@
 import "../css/SearchBar.css";
-import React, { useEffect, useState } from 'react';
-import { Search } from "@material-ui/icons";
+import { useEffect, useState } from "react";
 import { Pay } from "./index";
 import { getUserIdLS } from "../auth";
 
@@ -17,7 +16,13 @@ interface User {
   fundingSource: string;
 }
 
-export default function SearchBar({ userId, firstName, lastName, email, customerUrl, fundingSource}: any) {
+export default function SearchBar({
+  userId,
+  firstName,
+  lastName,
+  email,
+  fundingSource,
+}: any) {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [recipientId, setRecipientId] = useState(0);
@@ -28,7 +33,7 @@ export default function SearchBar({ userId, firstName, lastName, email, customer
   const [recipientBankUrl, setRecipientBankUrl] = useState("");
 
   function getAllUsers() {
-    fetch("http://localhost:5000/api/users/")
+    fetch("https://fierce-sea-46269.herokuapp.com/api/users/")
       .then((response) => response.json())
       .then((result) => {
         setUsers(result.users);
@@ -73,18 +78,15 @@ export default function SearchBar({ userId, firstName, lastName, email, customer
                   (user.firstName
                     .toLowerCase()
                     .includes(searchTerm.toLowerCase()) &&
-                    user.isVerified &&
-                    user.hasBank && user.id !== Number(getUserIdLS())) ||
+                    user.id !== Number(getUserIdLS())) ||
                   (user.lastName
                     .toLowerCase()
                     .includes(searchTerm.toLowerCase()) &&
-                    user.isVerified &&
-                    user.hasBank && user.id !== Number(getUserIdLS())) ||
+                    user.id !== Number(getUserIdLS())) ||
                   (user.email
                     .toLowerCase()
                     .includes(searchTerm.toLowerCase()) &&
-                    user.isVerified &&
-                    user.hasBank && user.id !== Number(getUserIdLS()))
+                    user.id !== Number(getUserIdLS()))
                 ) {
                   return user;
                 }

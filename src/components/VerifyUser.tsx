@@ -1,58 +1,99 @@
-import { Button, Container, TextField } from '@material-ui/core';
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { getUserIdLS } from "../auth";
+import "../css/VerifyUser.css";
+import { Button, Container, TextField } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  getEmailLS,
+  getFirstNameLS,
+  getLastNameLS,
+  getUserIdLS,
+} from "../auth";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+toast.configure();
 
-export default function VerifyUser({customerUrl, setCustomerUrl, firstName, lastName, userId}: any) {
-  const [ address1, setAddress1 ] = useState("");
-  const [ city, setCity ] = useState("");
-  const [ state, setState ] = useState("");
-  const [ postalCode, setPostalCode ] = useState("");
-  const [ dateOfBirth, setDateOfBirth ] = useState("");
-  const [ ssn, setSSN] = useState("");
-  const [ email, setEmail ] = useState("");
-  const [ password, setPassword ] = useState("");
+export default function VerifyUser({
+  customerUrl,
+  setCustomerUrl,
+  firstName,
+  lastName,
+  userId,
+}: any) {
+  const [address1, setAddress1] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState("");
+  const [ssn, setSSN] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isVerified, setIsVerified] = useState(false);
+  const [isFormComplete, setIsFormComplete] = useState(true);
   const navigate = useNavigate();
-  
+
   function createVerifiedCustomer(event: React.FormEvent<HTMLFormElement>) {
     event?.preventDefault();
-    fetch("http://localhost:5000/api/transactions/create-customer", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        firstName,
-        lastName,
-        email,
-        address1,
-        city,
-        state,
-        postalCode,
-        dateOfBirth,
-        ssn
-      }),
-    })
+    fetch(
+      "https://fierce-sea-46269.herokuapp.com/api/transactions/create-customer",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: firstName || getFirstNameLS(),
+          lastName: lastName || getLastNameLS(),
+          email: email || getEmailLS(),
+          address1,
+          city,
+          state,
+          postalCode,
+          dateOfBirth,
+          ssn,
+        }),
+      }
+    )
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
         if (result.name === "Success") {
-          console.log("Testing success message");
+          toast.success("Success!", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
           setCustomerUrl(result.customerUrl);
           setIsVerified(true);
+          setIsFormComplete(true);
         } else {
-          alert(result.message.body._embedded.errors[0].message);
+          toast.error(result.message.body._embedded.errors[0].message, {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
         }
       })
       .catch(console.error);
   }
 
-    function editUser(event: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) {
-      console.log("Url: ", customerUrl, "Email: ", email, "Password: ", password);
-      event?.preventDefault();
-      fetch(`http://localhost:5000/api/users/${userId || getUserIdLS()}`, {
+  function editUser(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined
+  ) {
+    console.log("Url: ", customerUrl, "Email: ", email, "Password: ", password);
+    event?.preventDefault();
+    fetch(
+      `https://fierce-sea-46269.herokuapp.com/api/users/${
+        userId || getUserIdLS()
+      }`,
+      {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -61,20 +102,38 @@ export default function VerifyUser({customerUrl, setCustomerUrl, firstName, last
           email,
           password,
           customerUrl,
-          isVerified: true
+          isVerified: true,
         }),
+      }
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        navigate("/add-bank");
       })
-        .then((response) => response.json())
-        .then((result) => {
-          console.log(result);
-          navigate('/add-bank')
-        })
-        .catch(console.error);
+      .catch(console.error);
+  }
+
+  useEffect(() => {
+    if (isVerified) {
+      navigate("/add-bank");
     }
+  });
 
   return (
-    <div>
-      <div className="edit-form-container">
+    <div className="edit-form-container">
+      <section className="information">
+        <h3>
+          Reasons to become Verfied<i>!</i>
+        </h3>
+        <ol>
+          <li> Faster Service </li>
+          <li> Send Money</li>
+          <li> Receive Money</li>
+          <li> Account Security</li>
+        </ol>
+      </section>
+      <div className="mainForm">
         <Container className="material-container">
           <form
             className="verfiy-user-form"
@@ -82,17 +141,6 @@ export default function VerifyUser({customerUrl, setCustomerUrl, firstName, last
               createVerifiedCustomer(event);
             }}
           >
-            <TextField
-              className="input-field"
-              autoComplete="off"
-              id="standard-basic"
-              label="Enter email"
-              size="small"
-              required
-              onChange={(event) => {
-                setEmail(event.target.value);
-              }}
-            />
             <TextField
               className="input-field"
               autoComplete="off"
@@ -116,10 +164,12 @@ export default function VerifyUser({customerUrl, setCustomerUrl, firstName, last
               }}
             />
             <TextField
-              className="input-field"
+              className="input-field stateInitials"
               autoComplete="off"
               id="standard-basic"
-              label="Enter State"
+              label="Enter State Initials"
+              style={{ textTransform: "capitalize", fontWeight: "bold" }}
+              inputProps={{ maxLength: 2 }}
               size="small"
               required
               onChange={(event) => {
@@ -141,7 +191,8 @@ export default function VerifyUser({customerUrl, setCustomerUrl, firstName, last
               className="input-field"
               autoComplete="off"
               id="standard-basic"
-              label="Enter date of birth"
+              label="Enter date of birth (YYYY-MM-DD)"
+              inputProps={{ maxLength: 10 }}
               size="small"
               required
               onChange={(event) => {
@@ -183,17 +234,18 @@ export default function VerifyUser({customerUrl, setCustomerUrl, firstName, last
             <Button
               type="submit"
               variant="contained"
-              color="primary"
+              color="secondary"
               id="loginBtn"
-              disabled={isVerified}
-              onClick={(event) => editUser(event)}
+              disabled={isFormComplete}
+              onClick={(event) => {
+                editUser(event);
+              }}
             >
-              Add Bank to send money
+              Next Step: Add Bank to send money
             </Button>
           </form>
         </Container>
       </div>
     </div>
   );
-
 }

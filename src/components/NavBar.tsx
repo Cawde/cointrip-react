@@ -6,11 +6,9 @@ import { Link } from "react-router-dom";
 import { getUserIdLS } from "../auth";
 const icon = require("../assets/logo2.png");
 
-
 export const useStyles = makeStyles({
   button: {
     color: "black",
-    // backgroundColor: theme.palette.primary.main,
     backgroundColor: "white",
     marginTop: "5px",
   },
@@ -23,9 +21,13 @@ export default function NavBar() {
       <ul className="navbar">
         <li className="appname-icon-container">
           <Link to="/" className="app-name" style={{ color: "white" }}>
-            Coin trip
+            Cointrip
           </Link>
-          <img src={icon} className="icon" alt="Icon for Cointrip, displays a golden coin followed by 3 blue lines that insinuate movement"/>
+          <img
+            src={icon}
+            className="icon"
+            alt="Icon for Cointrip, displays a golden coin followed by 3 blue lines that insinuate movement"
+          />
         </li>
         <li>
           {getUserIdLS() ? (
