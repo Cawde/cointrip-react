@@ -40,6 +40,12 @@ When the user enters the register view flow, they will visit the register user p
 # Add Bank page
 ![add_bank_view](https://user-images.githubusercontent.com/62577188/148221221-766fc952-cf1c-4338-9126-5f8dee9b879e.png)
 
+# Paying a user via dashboard
+![search_pay_view](https://user-images.githubusercontent.com/62577188/148225250-0e1ee36b-d414-4e82-8973-0f88a5d13b7f.png)
+
+Once the user has progressed through the register flow, they can now search users to send money to.
+*important* For those who wish to register real banking information for testing, you can test the app by sending money to Peter Parker spiderman@cointrip.com. This user has completely been through the register flow and has a verified account with Dwolla and has an added bank source.
+
 In the image below, you will see how I decided to structure my files. In the src file I have included the follow:
 assets - includes all images used for the site,
 components - includes all react components for the site, which holds all the logic for rendering each view the user sees as they navigate through Cointrip,
@@ -59,6 +65,7 @@ Some UI components used from this particular library include: Button, Container,
 Due to nature of the version of Dwolla.js this app uses, which is sandbox mode, no money will actually be sent to other users. Users can input their information into dwolla and add a bank source but no money will actually be withdrawn from the bank source. However, since the process works in sandbox mode it will work in live mode if I toggle it. I currently will not toggle it to live mode until I feel that the security of Cointrip is at the standard that any user who inputs sensitive information to a website would require.
 
 #Additional React information below
+
 
 # Getting Started with Create React App
 
