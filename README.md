@@ -1,3 +1,61 @@
+# Welcome to Cointrip’s front-end built with React.js!
+I wrote documentation for the backend this project uses located here: https://github.com/Cawde/cointrip/blob/main/README.md
+Please read!
+
+Please visit Cointrip here at https://stupefied-johnson-3ffdcc.netlify.app/
+
+To get started with opening Cointrip on your machine please:
+1. Clone the repo
+2. Typing “npm install” into the terminal
+3. Typing “npm run start” into the terminal
+
+
+
+
+There are many views the user will interact with upon navigating Cointrip. Such as the:
+
+# Home page 
+![home_page_view](https://user-images.githubusercontent.com/62577188/148220495-3e1c36fb-3bf6-4e16-8fdc-6ef3cd552152.png)
+
+# Login page
+![login_page_view](https://user-images.githubusercontent.com/62577188/148220753-0f167c77-6351-4647-a520-3acaf19caa68.png)
+
+# Dashboard
+![dashboard_view](https://user-images.githubusercontent.com/62577188/148220840-b18a2212-9b7a-4348-8c67-997b9959792d.png)
+
+The dashboard page will be navigated to via either logging in or adding a bank source via the register view flow.
+
+
+
+When the user enters the register view flow, then will visit the register user page, verify user page, and the add bank page. These steps are required to send money to other users via the dashboard.
+
+# Register page
+![register_page_view](https://user-images.githubusercontent.com/62577188/148220795-740c75b5-7a70-4688-9c24-33b3c0594370.png)
+
+
+# Verify user page
+![verify_user_view](https://user-images.githubusercontent.com/62577188/148221177-67bf07e9-6c9c-46af-b3f3-a05813c536da.png)
+
+# Add Bank page
+![add_bank_view](https://user-images.githubusercontent.com/62577188/148221221-766fc952-cf1c-4338-9126-5f8dee9b879e.png)
+
+In the image below, you will see how I decided to structure my files. In the src file I have included the follow:
+assets - includes all images used for the site,
+components - includes all react components for the site, which holds all the logic for rendering each view the user sees as they navigate through Cointrip,
+css - includes all the css files for the corresponding components
+
+I decided to organize my files this way because it is simple, similar files are grouped together for ease of browsing, and it is a convention for developing a react app.
+
+![file_explorer](https://user-images.githubusercontent.com/62577188/148221336-97636984-1ab5-43e8-bf70-dfaa84bbffb9.png)
+
+Some examples of reusable components that I have created include the "SearchBar" component and the "NavBar component".
+The NavBar component is present on most pages and the SearchBar component, although only present on the dashboard page, can easily be used in another project and configured.
+
+This project was also built using @material-ui/@core library.
+Some UI components used from this particular library include: Button, Container, TextField, Various Icons, makeStyles, and Modal
+
+#Additional React information below
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
