@@ -6,3 +6,4 @@ export { default as NavBar } from './NavBar';
 export { default as SearchBar } from './SearchBar';
 export { default as VerifyUser } from './VerifyUser';
 export { default as AddBank } from './AddBank';
+export { default as Pay } from './Pay';

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUserIdLS } from "../auth";
 
-export default function VerifyUser({firstName, lastName, userId}: any) {
+export default function VerifyUser({customerUrl, setCustomerUrl, firstName, lastName, userId}: any) {
   const [ address1, setAddress1 ] = useState("");
   const [ city, setCity ] = useState("");
   const [ state, setState ] = useState("");
@@ -11,7 +11,6 @@ export default function VerifyUser({firstName, lastName, userId}: any) {
   const [ dateOfBirth, setDateOfBirth ] = useState("");
   const [ ssn, setSSN] = useState("");
   const [ email, setEmail ] = useState("");
-  const [ customerUrl, setCustomerUrl ] = useState("");
   const [ password, setPassword ] = useState("");
   const [isVerified, setIsVerified] = useState(false);
   const navigate = useNavigate();
@@ -53,7 +52,7 @@ export default function VerifyUser({firstName, lastName, userId}: any) {
     function editUser(event: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) {
       console.log("Url: ", customerUrl, "Email: ", email, "Password: ", password);
       event?.preventDefault();
-      fetch(`http://localhost:5000/api/users/${getUserIdLS()}`, {
+      fetch(`http://localhost:5000/api/users/${userId || getUserIdLS()}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

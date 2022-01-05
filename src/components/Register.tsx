@@ -2,12 +2,10 @@ import "../css/Register.css";
 import { Button, Container, TextField } from "@material-ui/core";
 import React, { useState } from "react";
 import { useStyles } from "./NavBar";
-import { setUserIdLS } from "../auth";
+import { setUserFirstNameLS, setUserIdLS, setUserLastNameLS } from "../auth";
 import { Link, useNavigate } from "react-router-dom";
 
-export default function Register({ setUserId, email, setEmail, password, setPassword }: any) {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+export default function Register({ firstName, setFirstName, lastName, setLastName, setUserId, email, setEmail, password, setPassword }: any) {
   const [passConfirm, setPassConfirm] = useState("");
   const classes = useStyles();
   const navigate = useNavigate();
@@ -36,12 +34,15 @@ export default function Register({ setUserId, email, setEmail, password, setPass
     })
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         if (result.success === false) {
           alert(result.message);
         } else {
           setUserId(result.userId);
           setUserIdLS(result.userId);
+          setFirstName(result.user.firstName);
+          setUserFirstNameLS(result.user.firstName);
+          setUserLastNameLS(result.user.lastName);
+          setLastName(result.user.lastName);
           navigate(`/verify-user`);
         }
       })

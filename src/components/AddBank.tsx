@@ -10,18 +10,16 @@ declare global {
   }
 }
 
-export default function AddBank({ customerUrl, email, setEmail, password, setPassword }: any) {
+export default function AddBank({ fundingSource, setFundingSource, customerUrl, email, setEmail, password, setPassword }: any) {
   const [name, setName] = useState("");
   const [routingNumber, setRoutingNumber] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [token, setToken] = useState("");
-  const [fundingSource, setFundingSource] = useState("");
   const [hasBank, setHasBank] = useState(false);
   let navigate = useNavigate();
 
   function editUser(event: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) {
     event?.preventDefault();
-    console.log("fundingSourceUrl: ", fundingSource, "Email: ", email, "Password: ", password);
     fetch(`http://localhost:5000/api/users/${getUserIdLS()}`, {
       method: "PATCH",
       headers: {
@@ -36,7 +34,6 @@ export default function AddBank({ customerUrl, email, setEmail, password, setPas
     })
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         navigate(`/dashboard/${getUserIdLS()}`);
 
       })
@@ -44,7 +41,6 @@ export default function AddBank({ customerUrl, email, setEmail, password, setPas
   }
 
   async function createVerifiedFundingSource() {
-    console.log(customerUrl);
     fetch("http://localhost:5000/api/transactions/funding-source-token", {
       method: "POST",
       headers: {
@@ -56,7 +52,6 @@ export default function AddBank({ customerUrl, email, setEmail, password, setPas
     })
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setToken(result.token);
       })
       .catch(console.error);
@@ -64,7 +59,6 @@ export default function AddBank({ customerUrl, email, setEmail, password, setPas
 
   async function addBank(event: any) {
     event?.preventDefault();
-    console.log(token);
     dwolla.configure("sandbox");
     dwolla.fundingSources.create(
       token,
@@ -79,9 +73,7 @@ export default function AddBank({ customerUrl, email, setEmail, password, setPas
           error: err,
           response: res,
         };
-        console.log(logValue);
         if (logValue.error === null) {
-          console.log(logValue.response._links["funding-source"].href);
           setFundingSource(logValue.response._links["funding-source"].href);
           setHasBank(true);
         }

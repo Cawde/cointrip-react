@@ -1,23 +1,36 @@
 import "../css/SearchBar.css";
 import React, { useEffect, useState } from 'react';
 import { Search } from "@material-ui/icons";
+import { Pay } from "./index";
+import { getUserIdLS } from "../auth";
 
 interface User {
   id: number;
   firstName: string;
   lastName: string;
   email: string;
+  profilePicture: string;
+  isActive: boolean;
+  isVerified: boolean;
+  hasBank: boolean;
+  customerUrl: string;
+  fundingSource: string;
 }
 
-export default function SearchBar({setOpenStripe, setRecipientId, setRecipientName, setRecipientEmail}: any) {
+export default function SearchBar({ userId, firstName, lastName, email, customerUrl, fundingSource}: any) {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [recipientId, setRecipientId] = useState(0);
+  const [recipientFirstName, setRecipientFirstName] = useState("");
+  const [recipientLastName, setRecipientLastName] = useState("");
+  const [recipientEmail, setRecipientEmail] = useState("");
+  const [openPayment, setOpenPayment] = useState(false);
+  const [recipientBankUrl, setRecipientBankUrl] = useState("");
 
   function getAllUsers() {
     fetch("http://localhost:5000/api/users/")
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setUsers(result.users);
       })
       .catch(console.error);
@@ -25,10 +38,24 @@ export default function SearchBar({setOpenStripe, setRecipientId, setRecipientNa
 
   useEffect(() => {
     getAllUsers();
-  },[]);
+  }, []);
 
   return (
     <div className="searchbar">
+      <Pay
+        openPayment={openPayment}
+        setOpenPayment={setOpenPayment}
+        userId={userId}
+        firstName={firstName}
+        lastName={lastName}
+        email={email}
+        fundingSource={fundingSource}
+        recipientId={recipientId}
+        recipientFirstName={recipientFirstName}
+        recipientLastName={recipientLastName}
+        recipientEmail={recipientEmail}
+        recipientBankUrl={recipientBankUrl}
+      />
       <div className="input">
         <input
           type="text"
@@ -43,13 +70,21 @@ export default function SearchBar({setOpenStripe, setRecipientId, setRecipientNa
                 if (searchTerm === "") {
                   return;
                 } else if (
-                  user.firstName
+                  (user.firstName
                     .toLowerCase()
-                    .includes(searchTerm.toLowerCase()) ||
-                  user.lastName
+                    .includes(searchTerm.toLowerCase()) &&
+                    user.isVerified &&
+                    user.hasBank && user.id !== Number(getUserIdLS())) ||
+                  (user.lastName
                     .toLowerCase()
-                    .includes(searchTerm.toLowerCase()) ||
-                  user.email.toLowerCase().includes(searchTerm.toLowerCase())
+                    .includes(searchTerm.toLowerCase()) &&
+                    user.isVerified &&
+                    user.hasBank && user.id !== Number(getUserIdLS())) ||
+                  (user.email
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase()) &&
+                    user.isVerified &&
+                    user.hasBank && user.id !== Number(getUserIdLS()))
                 ) {
                   return user;
                 }
@@ -61,9 +96,11 @@ export default function SearchBar({setOpenStripe, setRecipientId, setRecipientNa
                     className="results-item"
                     onClick={() => {
                       setRecipientId(user.id);
-                      setRecipientName(user.firstName);
+                      setRecipientFirstName(user.firstName);
+                      setRecipientLastName(user.lastName);
                       setRecipientEmail(user.email);
-                      setOpenStripe(true);
+                      setRecipientBankUrl(user.fundingSource);
+                      setOpenPayment(true);
                     }}
                   >
                     <p>
@@ -77,5 +114,4 @@ export default function SearchBar({setOpenStripe, setRecipientId, setRecipientNa
       </div>
     </div>
   );
-
 }

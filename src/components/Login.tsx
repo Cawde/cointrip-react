@@ -2,9 +2,9 @@ import "../css/Login.css";
 import { Button, Container, TextField } from "@material-ui/core";
 import { useStyles } from "./NavBar";
 import { Link, useNavigate } from "react-router-dom";
-import { setUserIdLS } from "../auth";
+import { setUserIdLS, setUserFirstNameLS, setUserLastNameLS } from "../auth";
 
-export default function Login({setUserId, email, setEmail, password, setPassword}: any) {
+export default function Login({setFundingSource, setUserId, setFirstName, setLastName ,email, setEmail, password, setPassword}: any) {
   const classes = useStyles();
   const navigate = useNavigate();
 
@@ -23,12 +23,16 @@ export default function Login({setUserId, email, setEmail, password, setPassword
     })
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         if (result.success === false) {
           alert(result.message);
         } else {
           setUserId(result.userId);
           setUserIdLS(result.userId);
+          setFirstName(result.user.firstName);
+          setUserFirstNameLS(result.user.firstName);
+          setUserLastNameLS(result.user.lastName);
+          setLastName(result.user.lastName);
+          setFundingSource(result.user.fundingSource);
           if (!result.user.isVerified) {
             navigate('/verify-user')
           } else if (result.user.isVerified && !result.user.hasBank) {

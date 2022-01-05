@@ -19,30 +19,25 @@ interface Transaction {
   notes: string;
 }
 
-
-
-export default function Dashboard({ userId, setUserId, email, setEmail, setCustomerUrl }: any) {
+export default function Dashboard({ userId, setUserId, email, setEmail, customerUrl, setCustomerUrl, fundingSource }: any) {
   let navigate = useNavigate();
   const [transactions, setTransactions] = useState([]);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [open, setOpen] = useState(false);
-  // const [amount, setAmount] = useState(0);
-  // const [note, setNote] = useState("");
-  const [recipientId, setRecipientId] = useState("");
-  const [recipientName, setRecipientName] = useState("");
-  const [recipientEmail, setRecipientEmail] = useState("");
+  const [amount, setAmount] = useState(0);
+  const [profilePicture, setProfilePicture] = useState("");
 
   function getTransactionHistory() {
     fetch(`http://localhost:5000/api/users/dashboard/${getUserIdLS()}`)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setTransactions(result.userTransactions);
         setFirstName(result.user.firstName);
         setLastName(result.user.lastName);
-        setCustomerUrl(result.user.customerUrl)
+        setCustomerUrl(result.user.customerUrl);
+        setProfilePicture(result.user.profilePicture);
       })
       .catch(console.error);
   }
@@ -64,39 +59,12 @@ export default function Dashboard({ userId, setUserId, email, setEmail, setCusto
       })
         .then((response) => response.json())
         .then((result) => {
-          console.log(result);
           alert(result.message);
         })
         .catch(console.error);
         setOpen(false);
   }
 
-  //Waiting for Dwolla implementation
-  // function createTransaction() {
-  //   fetch("http://localhost:5000/api/transactions", {
-  //       method: "POST",
-  //       credentials: "include",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         initiateId: userId,
-  //         initiateName: firstName,
-  //         initiateEmail: email,
-  //         amount: amount,
-  //         recipientId: recipientId,
-  //         recipientName: recipientName,
-  //         recipientEmail: recipientEmail,
-  //         date: new Date(),
-  //         notes: note
-  //       }),
-  //     })
-  //       .then((response) => response.json())
-  //       .then((result) => {
-  //         console.log(result);
-  //       })
-  //       .catch(console.error);
-  // }
 
   function signOut() {
     setUserId(null);
@@ -123,7 +91,15 @@ export default function Dashboard({ userId, setUserId, email, setEmail, setCusto
 
   return (
     <div className="dashboard-page">
-      <SearchBar setRecipientId={setRecipientId} setRecipientName={setRecipientName} setRecipientEmail={setRecipientEmail}/>
+      <SearchBar
+        userId={userId}
+        firstName={firstName}
+        lastName={lastName}
+        email={email}
+        amount={amount}
+        customerUrl={customerUrl}
+        fundingSource={fundingSource}
+      />
       <section className="dashboard-sidebar">
         <ul>
           <li>
