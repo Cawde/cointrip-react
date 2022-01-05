@@ -54,7 +54,7 @@ The NavBar component is present on most pages and the SearchBar component, altho
 This project was also built using @material-ui/@core library.
 Some UI components used from this particular library include: Button, Container, TextField, Various Icons, makeStyles, and Modal
 
-#Important
+# Important
 Due to nature of the version of Dwolla.js this app uses, which is sandbox mode, no money will actually be sent to other users. Users can input their information into dwolla and add a bank source but no money will actually be withdrawn from the bank source. However, since the process works in sandbox mode it will work in live mode if I toggle it. I currently will not toggle it to live mode until I feel that the security of Cointrip is at the standard that any user who inputs sensitive information to a website would require.
 
 #Additional React information below
